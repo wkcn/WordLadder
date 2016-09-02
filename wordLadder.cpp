@@ -2,37 +2,84 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <stack>
+#include <set>
 #include <map>
 #include <queue>
 #include <utility>
 using namespace std;
 
+string to_lower(string str){
+    string res;
+    for (int i = 0;i < str.size(); ++i){
+        char c = str[i];
+        if (c >= 'A' && c <= 'Z')c = c - 'A' + 'a';
+        res += c;
+    }
+    return res;
+}
+
 //处理所有长度为n的单词
-class WordNetwork{
+class WordsNetwork{
 	public:
+        WordsNetwork(){}
 		//传入长度为n的单词组
-		WordNetwork(vector<string> &vs){
+		WordsNetwork(vector<string> &vs){
 			//构建网络
 			BuildNetwork(vs);
 		}
 		//传入长度为n的两个单词，返回路径； 若返回值为空， 则路径不存在
 		//使用算法， BFS 广度优先搜索
 		vector<string> GetPath(string from, string to){
-			if (from.size() == len || to.size() == len)return vector<string>(); // 不合法
-			if (from == to)return vector<string>(from); // 对于同一节点
-			set<string> vis; // 已访问节点
-			queue<pair<string, string> > q; // 队列元素 （单词， 单词的父亲）
-			q.push(make_pair(from, ""));
-			vis.insert(from);
+			if (from.size() != len || to.size() != len)return vector<string>(); // 不合法
+			if (from == to)return vector<string>(1, from); // 对于同一节点
+			queue<string> q; // 队列元素 （单词， 单词的父亲）
+			q.push(from);
+            map<string, string> rec;
+            rec[from] = "";
 			
 			while(!q.empty()){
-				pair<string, string> p = q.front();
-				q.pop();
-				string word = p.first();
-				string parent = p.second();
+				string word = q.front();
+                q.pop();
 				if (word == to){
 					// 到达目标点
+                    stack<string> st;
+                    while(word.size()){
+                        st.push(word);
+                        word = rec[word]; // 获取上一个节点
+                    }
+                    vector<string> path;
+                    while(!st.empty()){
+                        path.push_back(st.top());
+                        st.pop();
+                    }
+                    return path;
 				}
+                
+                //添加邻居
+                for (int i = 0;i < len; ++i){
+                    string s;
+                    for (int j = 0;j < len; ++j){
+                        if (i != j){
+                            s += word[j];
+                        }
+                    }
+                    set<char> &se = edges[i][s];
+                    for (set<char>::iterator iter = se.begin(); iter != se.end(); ++iter){
+                        string neibor;
+                        // 构造邻居的单词
+                        for (int k = 0;k < len; ++k){
+                            if (i == k){
+                                neibor += *iter;
+                            }else{
+                                neibor += word[k];
+                            }
+                        }
+                        if (rec.count(neibor))continue; // 已访问过
+                        rec[neibor] = word;
+                        q.push(neibor);
+                    }
+                }
 			}
 			return vector<string>();
 		}
@@ -73,10 +120,46 @@ class WordNetwork{
 };
 
 int main(){
+    cout << "读取文件：dictionary-yawl.txt" << endl;
 	ifstream fin("dictionary-yawl.txt");
+    if (fin.fail()){
+        cout << "读取文件失败，请将dictionary-yawl.txt文件放在exe文件所在目录" << endl;
+        return 0;
+    }
+    vector<vector<string> > words;
 	while(!fin.eof()){
 		string word;
 		fin >> word;
+        int len = word.size();
+        if (words.size() <= len)words.resize(len + 1);
+        words[len].push_back(to_lower(word)); // 转为小写并加入字典
 	}
+    
+    cout << "构建网络中，请等待" << endl;
+    //构建网络
+    vector<WordsNetwork> ns;
+    for (int i = 0;i < words.size(); ++i){
+        ns.push_back(WordsNetwork(words[i]));
+    }
+    while(true){
+        cout << "请输入两个相同长度的单词：" << endl;
+        string wordA, wordB;
+        cin >> wordA;
+        cin >> wordB;
+        if (wordA.size() != wordB.size()){
+            cout << "单词长度不匹配" << endl;
+        }else{
+            vector<string> path = ns[wordA.size()].GetPath(wordA, wordB);
+            if (path.empty()){
+                cout << "从" << wordA << "到" << wordB << "不存在变换阶梯" << endl;
+            }else{
+                cout << "变换阶梯为：";
+                for (int i = 0;i < path.size(); ++i){
+                    cout << path[i] << "    ";
+                }
+                cout << endl;
+            }
+        }
+    }
 	return 0;
 }
