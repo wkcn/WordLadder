@@ -7,6 +7,7 @@
 #include <map>
 #include <queue>
 #include <utility>
+#include <cstdio>
 using namespace std;
 
 string to_lower(string str){
@@ -137,10 +138,12 @@ int main(){
     
     cout << "构建网络中，请等待" << endl;
     //构建网络
-    vector<WordsNetwork> ns;
-    for (int i = 0;i < words.size(); ++i){
-        ns.push_back(WordsNetwork(words[i]));
+    vector<WordsNetwork> ns(words.size() + 1);
+
+    for (int i = 1;i < words.size(); ++i){
+        ns[i] = WordsNetwork(words[i]);
     }
+    
     while(true){
         cout << "请输入两个相同长度的单词：" << endl;
         string wordA, wordB;
@@ -151,9 +154,9 @@ int main(){
         }else{
             vector<string> path = ns[wordA.size()].GetPath(wordA, wordB);
             if (path.empty()){
-                cout << "从" << wordA << "到" << wordB << "不存在变换阶梯" << endl;
+                cout << "从" << wordA << "到" << wordB << "不存在变换词梯" << endl;
             }else{
-                cout << "变换阶梯为：";
+                cout << "变换词阶为：";
                 for (int i = 0;i < path.size(); ++i){
                     cout << path[i] << "    ";
                 }
