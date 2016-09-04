@@ -1,0 +1,34 @@
+MaxWordLadder: 
+	1: i  
+	2: ef  ea  aa  ai  gi  gu  
+	3: cru  cry  ary  aby  aba  aha  cha  chi  ghi  
+	4: apse  arse  arle  able  ably  ally  alls  aals  dals  dale  daze  faze  fuze  fuzz  fizz  gizz  
+	5: amped  imped  imbed  embed  ember  emmer  emmew  enmew  endew  ender  elder  alder  alter  altar  antar  anear  arear  areas  arias  arils  anils  anile  anole  amole  ample  apple  apply  appay  appal  appel  
+	6: brough  grough  grouch  crouch  crotch  crutch  clutch  clunch  clench  cleuch  cleugh  clough  chough  choush  chouse  crouse  croute  crouts  clouts  clauts  clasts  coasts  coapts  compts  comets  comers  coders  ciders  eiders  enders  endews  enmews  emmews  emmers  embers  embars  embark  imbark  impark  imparl  emparl  empare  empale  embale  emball  embail  emboil  
+	7: bournes  bourses  courses  courser  courter  counter  chunter  chanter  chaster  coaster  coasted  coacted  coached  couched  couches  bouches  botches  butches  bunches  buncoes  bunkoes  buckoes  buckles  huckles  heckles  deckles  deciles  decides  decided  decoded  decoyed  decayed  delayed  delated  debated  debased  debases  degases  degames  defames  defaces  defaced  
+	8: abutting  abetting  aretting  fretting  fritting  flitting  flatting  blatting  blasting  brasting  brashing  crashing  clashing  clasping  clamping  cramping  crimping  crisping  crispins  crispens  crispers  crimpers  crimmers  crammers  clammers  clambers  chambers  chamfers  chaufers  chaumers  charmers  chargers  changers  clangers  clingers  clinkers  clickers  clickets  crickets  crockets  brockets  brackets  brackens  blackens  
+	9: balladine  ballading  ballating  balleting  bulleting  bullering  butlering  buttering  battering  battening  fattening  fastening  hastening  hartening  hardening  gardening  
+	10: blethering  blathering  blattering  clattering  clittering  glittering  glistering  blistering  
+	11: barminesses  balminesses  balkinesses  bulkinesses  bulginesses  bugginesses  bogginesses  dogginesses  dodginesses  
+	12: hydrogenated  hydrogenates  hydrogenases  hydrogenises  hydrogenised  hydrogenized  
+	13: expandability  expendability  extendability  extendibility  extensibility  
+	14: documentalists  documentarists  documentarises  documentarised  documentarized  
+	15: expandabilities  expendabilities  extendabilities  extendibilities  extensibilities  
+	16: apophthegmatists  apophthegmatises  apophthegmatised  apophthegmatized  
+	17: anthropomorphized  anthropomorphised  anthropomorphises  anthropomorphoses  anthropomorphosis  
+	18: constitutionalisms  constitutionalises  constitutionalised  constitutionalized  
+	19: adrenocorticotropic  adrenocorticotropin  
+	20: adrenocorticotrophic  adrenocorticotrophin  
+	21: compartmentalisations  compartmentalizations  
+	22: electroencephalographs  electroencephalography  
+	23: carboxymethylcelluloses  
+	24: dichlorodifluoromethanes  
+	25: antidisestablishmentarian  
+	26: 
+	27: electroencephalographically  
+	28: antidisestablishmentarianism  
+	29: antidisestablishmentarianisms  
+	30: floccinaucinihilipilifications  
+	31: dichlorodiphenyltrichloroethane  
+	32: dichlorodiphenyltrichloroethanes  
+	33: 
