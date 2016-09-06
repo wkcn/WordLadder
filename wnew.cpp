@@ -7,7 +7,10 @@
 #include <map>
 #include <queue>
 #include <utility>
+#include <algorithm>
 #include <cstdio>
+#include <ctime>
+#include <cstdlib>
 using namespace std;
 
 string to_lower(string str){
@@ -18,6 +21,19 @@ string to_lower(string str){
         res += c;
     }
     return res;
+}
+
+template <typename T>
+void Shuffle(vector<T> &vs){
+	for (int i = 0;i < vs.size(); ++i){
+		int r = rand() % vs.size();
+		swap(vs[i], vs[r]);
+	}
+}
+
+template <typename T>
+T gmin(T a, T b){
+	return a<b?a:b;
 }
 
 //处理所有长度为n的单词
@@ -72,14 +88,12 @@ class WordsNetwork{
 			return vector<string>();
 		}
 		//得到该长度下, 最长词阶级
-		//方法: 枚举
+		//从一个顶点出发，进行BFS，访问所有顶点,取最大路径
 		vector<string> GetMaxPath(){
 			vector<string> maxPath;
 			for (int i = 0;i < sdata.size(); ++i){
 				//从i出发				
-				vector<int> dis(sdata.size(), sdata.size() + 100);
 				vector<bool> vis(sdata.size(), false);
-				dis[i] = 0;
 				vis[i] = true;
 				queue<pair<int, int> > q;
 				q.push(make_pair(i, 0));
@@ -107,6 +121,44 @@ class WordsNetwork{
 				if (path.size() > maxPath.size())maxPath = path;
 			}
 			return maxPath;
+		}
+		vector<vector<string> > GetPaths(int dis){
+			vector<vector<string> > paths;
+			vector<int> idList(sdata.size());
+			for (int i = 0;i < sdata.size(); ++i){
+				idList[i] = i;
+			}
+			Shuffle(idList);
+			for (int w = 0;w < sdata.size(); ++w){
+				int i = idList[w];
+				//从i出发				
+				vector<bool> vis(sdata.size(), false);
+				vis[i] = true;
+				queue<pair<int, int> > q;
+				q.push(make_pair(i, 0));
+				int maxDis = 0;
+				while(!q.empty()){
+					pair<int, int> p;
+					p = q.front();
+					q.pop();
+					int id = p.first;
+					int distance = p.second;
+					if (distance == dis){
+						vector<string> path = GetPath(sdata[i], sdata[id]);
+						paths.push_back(path);	
+						if (paths.size() > 10)break;
+						continue;
+					}
+					for (int i = 0;i < edges[id].size();++i){
+						int u = edges[id][i];
+						if (!vis[u]){
+							vis[u] = true;
+							q.push(make_pair(u, distance + 1));
+						}
+					}
+				}
+			}
+			return paths;
 		}
 	private:
 		void BuildNetwork(vector<string> &vs){
@@ -203,9 +255,9 @@ void TwoWords(vector<WordsNetwork> &ns){
 
 void GetMaxWordLadder(vector<WordsNetwork> &ns){
 	cout << "MaxWordLadder: " << endl;
-	for (int i = 1; i < ns.size(); ++i){
-		vector<string> path = ns[i].GetMaxPath();
-		cout << "\t" << i << ": ";
+	for (int j = 1; j < ns.size(); ++j){
+		vector<string> path = ns[j].GetMaxPath();
+		cout << "\t" << j << ": ";
 		for (int i = 0;i < path.size(); ++i){
 			cout << path[i] << "  ";
 		}
@@ -213,7 +265,30 @@ void GetMaxWordLadder(vector<WordsNetwork> &ns){
 	}
 }
 
+void GetPathsByDis(vector<WordsNetwork> &ns){
+	while(1){
+		cout << "Please Input wordLen and distance" << endl;
+		int len, dis;
+		cin >> len >> dis;
+		if (len >= ns.size()){
+			cout << "wordLen is over maxWordLen" << endl;
+			continue;
+		}
+		vector<vector<string> > paths = ns[len].GetPaths(dis);
+		Shuffle(paths);
+		for (int j = 1; j < gmin(paths.size(), size_t(10)); ++j){
+			cout << "Path " << j << ":";
+			vector<string> &path = paths[j];
+			for (int i = 0;i < path.size(); ++i){
+				cout << path[i] << "  ";
+			}
+			cout << endl;
+		}
+	}
+}
+
 int main(){
+	srand(time(0));
     cout << "Reading dictionary dictionary-yawl.txt" << endl;
 	ifstream fin("dictionary-yawl.txt");
     if (fin.fail()){
@@ -240,7 +315,8 @@ int main(){
 SELECT_MODE:
 	cout << "Please Input a Number:\n\
 	1: Input Two Words and Get Word Ladder\n\
-	2: Get MaxWordLadder\n";
+	2: Get MaxWordLadder\n\
+	3: Get Paths by Distance\n";
 
 	int mode;
 	cin >> mode;
@@ -252,6 +328,12 @@ SELECT_MODE:
 			GetMaxWordLadder(ns);
 			goto SELECT_MODE;
 			break;
+		case 3:
+			GetPathsByDis(ns);
+			break;
+		default:
+			cout << "Error Input"<< endl;
+			goto SELECT_MODE;
 	}
 
    	return 0;
